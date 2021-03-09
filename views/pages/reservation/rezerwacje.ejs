@@ -1,0 +1,53 @@
+<%- include('../../fragments/header.ejs') %>
+    <main>
+        <h2>Lista Rezerwacji</h2>
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th>Numer rezerwacji</th>
+                    <!--<th>Data od</th>
+                    <th>Data do</th>
+                    <th>Liczba osób</th>
+                    <th>Spędzona liczba dni</th>
+                    <th>Numer pokoju</th>-->
+                    <th>Dane Gościa</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let reservation of reservations) { %>
+                <tr>
+                    <td><%= reservation._id %></td>
+                    <!--<td><%= reservation.dateFrom.toDateString() %></td>
+                    <td><%= reservation.dateTo.toDateString() %></td>
+                    <td><%= reservation.visitors %></td>
+                    <td><%= reservation.spendDays %></td>
+                    <td><%= reservation.numberRoom %></td>-->
+                    <td><%= reservation.firstName %> <%= reservation.lastName %></td>
+                    <td>
+                        <ul class="list-actions">
+                            <li>
+                                <a href="/reservation/details/<%= reservation._id %>" class="list-actions-button-details">Szczegóły</a>
+                            </li>
+                            <% if(loggedUser) { %>
+                            <li>
+                                <a href="/reservation/edit/<%= reservation._id %>" class="list-actions-button-edit">Edytuj</a>
+                            </li>
+                            <li>
+                                <a href="/reservation/delete/<%= reservation._id %>" class="list-actions-button-delete">Usuń</a>
+                            </li>
+                            <% } %>
+                        </ul>
+                    </td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+        <p>
+            <% if(loggedUser) { %>
+            <a href="/reservation/add" class="button-add">Dodaj</a>
+            <a href="/reservation/addSimpleReservation" class="button-add">Dodaj dla istniejącego klienta</a>
+            <% } %>
+        </p>
+    </main>
+<%- include('../../fragments/footer.ejs') %>

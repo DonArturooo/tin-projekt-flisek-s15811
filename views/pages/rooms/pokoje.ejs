@@ -1,0 +1,46 @@
+<%- include('../../fragments/header.ejs') %>
+    <main>
+        <h2>Pokoje</h2>
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th>numer Pokoju</th>
+                    <th>ilość miejsc</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let room of rooms) { %>
+                <tr>
+                    <td><%= room.numberRoom %></td>
+                    <td><%= room.numberOfSpace %></td>
+                    <td>
+                        <ul class="list-actions">
+                            <li>
+                                <a href="/reservation/addRoomReservation/<%= room._id %>" class="list-actions-button-add">Zarezerwuj</a>
+                            </li>
+                            <li>
+                                <a href="/rooms/details/<%= room._id %>" class="list-actions-button-details">Szczegóły</a>
+                            </li>
+                            <% if(loggedUser) { %>
+                            <li>
+                                <a href="/rooms/edit/<%= room._id %>" class="list-actions-button-edit">Edytuj</a>
+                            </li>
+                            <li>
+                                <a href="/rooms/delete/<%= room._id %>" class="list-actions-button-delete">Usuń</a>
+                            </li>
+                            <% } %>
+                            
+                        </ul>
+                    </td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+        <p>
+            <% if(loggedUser) { %>
+            <a href="/rooms/add" class="button-add">Dodaj</a>
+            <% } %>
+        </p>
+    </main>
+<%- include('../../fragments/footer.ejs') %>
