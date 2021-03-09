@@ -1,0 +1,51 @@
+<%- include('../fragments/header.ejs') %>
+    <main>
+        <h2>Strona główna</h2>
+            <div>
+                <form class="form" method="post" action="/register" novalidate>
+
+                    <label for="firstName">Imię:</label>
+                    <input type="text" name="firstName" id="firstName" placeholder="2-60 znaków" value="<%= visitor.firstName %>"
+                        class="<%= validationErrors.find(e => e.path.includes('firstName')) ? 'error-input' : '' %>"/> 
+                    <span id="errorFirstName" class="errors-text">
+                        <% if (validationErrors.find(e => e.path.includes('firstName'))) { %>
+                            <%= validationErrors.find(e => e.path.includes('firstName')).message %>
+                        <% } %>
+                    </span>
+                    
+                    <label for="lastName">Nazwisko:</label>
+                    <input type="text" name="lastName" id="lastName" placeholder="2-60 znaków" value="<%= visitor.lastName %>"
+                        class="<%= validationErrors.find(e => e.path.includes('lastName')) ? 'error-input' : '' %>"/> 
+                    <span id="errorLastName" class="errors-text">
+                        <% if (validationErrors.find(e => e.path.includes('lastName'))) { %>
+                            <%= validationErrors.find(e => e.path.includes('lastName')).message %>
+                        <% } %>
+                    </span>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="<%= visitor.email %>"
+                        class="<%= validationErrors.find(e => e.path.includes('email')) ? 'error-input' : '' %>"/> 
+                    <span id="errorEmail" class="errors-text">
+                        <% if (validationErrors.find(e => e.path.includes('email'))) { %>
+                            <%= validationErrors.find(e => e.path.includes('email')).message %>
+                        <% } %>
+                    </span>
+        
+                    <label for="password">Hasło:</label>
+                    <input type="password" id="password" name="password" value="<%= visitor.password %>"
+                        class="<%= validationErrors.find(e => e.path.includes('password')) ? 'error-input' : '' %>"/> 
+                    <span id="errorPassword" class="errors-text">
+                        <% if (validationErrors.find(e => e.path.includes('password'))) { %>
+                            <%= validationErrors.find(e => e.path.includes('password')).message %>
+                        <% } %>
+                    </span>
+                    
+                    <div class="form-buttons">
+                        <input type="submit" value="Zarejestruj się" class="form-button-submit">
+                        <a href="/" class="form-button-edit">Anuluj</a>
+                        <p id="errorsSummary" class="errors-text"><%= loginError ? loginError : ''%></p>
+                    </div>
+                </form>
+            </div>
+    </main>
+<%- include('../fragments/footer.ejs') %>

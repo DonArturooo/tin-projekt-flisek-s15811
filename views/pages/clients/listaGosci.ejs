@@ -1,0 +1,51 @@
+<%- include('../../fragments/header.ejs') %>
+    <main>
+        <h2>Lista Gości</h2>
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
+                    <!--<th>e-mail</th>
+                    <th>telefon</th>-->
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let visitor of clients) { %>
+                <tr>
+                    <td><%= visitor.firstName %></td>
+                    <td><%= visitor.lastName %></td>
+                   <!-- <td><%= visitor.email %></td>
+                    <td><%= visitor.phone %></td>-->
+                    <td>
+                        <ul class="list-actions">
+                            
+                            <li>
+                                <a href="/clients/details/<%= visitor._id %>" class="list-actions-button-details">Szczegóły</a>
+                            </li>
+                            
+                            <% if(loggedUser) { %>
+                                <li>
+                                    <a href="/reservation/addClientReservation/<%= visitor._id %>" class="list-actions-button-add">Zarezerwuj pokój</a>
+                                </li>
+                                <li>
+                                    <a href="/clients/edit/<%= visitor._id %>" class="list-actions-button-edit">Edytuj</a>
+                                </li>
+                                <li>
+                                    <a href="/clients/delete/<%= visitor._id %>" class="list-actions-button-delete">Usuń</a>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+        <p>
+            <% if(loggedUser) { %>
+            <a href="/clients/add" class="button-add">Dodaj</a>
+            <% } %>
+        </p>
+    </main>
+<%- include('../../fragments/footer.ejs') %>

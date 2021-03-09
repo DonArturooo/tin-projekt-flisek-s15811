@@ -1,0 +1,102 @@
+<%- include('../../fragments/header.ejs') %>
+    <main>
+        <script type="application/javascript" src="/js/validationCommon.js"></script>
+        <script type="application/javascript" src="/js/validationReservationSimple.js"></script>
+
+        <h2><%= pageTitle %></h2>
+
+        <form class="form" method="post" action="<%=formAction%>" novalidate onsubmit="return validateForm();">
+            <input type="hidden" name="_id" value="<%= reservation._id %>">
+
+
+            <label for="dateFrom">Data początku rezerwacji:<abbr title="required" aria-label="required">*</abbr></label>
+            <input type="date" name="dateFrom" id="dateFrom"
+                class="<%= validationErrors.find(e => e.path.includes('dateFrom')) ? 'error-input' : '' %>"
+                value="<%= reservation.dateFrom ? reservation.dateFrom.toISOString().split('T')[0] : '' %>"
+                <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+            <span id="errorDateFrom" class="errors-text">
+                <% if (validationErrors.find(e => e.path.includes('dateFrom'))) { %>
+                    <%= validationErrors.find(e => e.path.includes('dateFrom')).message %>
+                <% } %>
+            </span>
+
+            <label for="dateTo">Data końca rezerwacji:<abbr title="required" aria-label="required">*</abbr></label>
+            <input type="date" name="dateTo" id="dateTo"
+                class="<%= validationErrors.find(e => e.path.includes('dateTo')) ? 'error-input' : '' %>"
+                value="<%= reservation.dateTo ? reservation.dateTo.toISOString().split('T')[0] : '' %>"
+                <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+            <span id="errorDateTo" class="errors-text">
+                <% if (validationErrors.find(e => e.path.includes('dateTo'))) { %>
+                    <%= validationErrors.find(e => e.path.includes('dateTo')).message %>
+                <% } %>
+            </span>
+
+            <label for="visitors">Liczba gości:<abbr title="required" aria-label="required">*</abbr></label>
+            <input type="number" name="visitors" id="visitors" placeholder="min 1 max 5" value="<%= reservation.visitors %>"
+                class="<%= validationErrors.find(e => e.path.includes('visitors')) ? 'error-input' : '' %>"
+                <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+            <span id="errorVisitors" class="errors-text">
+                <% if (validationErrors.find(e => e.path.includes('visitors'))) { %>
+                    <%= validationErrors.find(e => e.path.includes('visitors')).message %>
+                <% } %>
+            </span>
+            
+            <% if (formMode == 'showDetails' || formMode == 'edit') { %>
+            <label for="spendDays">Liczba spędzonych dni:</label>
+            <input type="number" name="spendDays" id="spendDays" value="<%= reservation.spendDays %>"
+                class="<%= validationErrors.find(e => e.path.includes('spendDays')) ? 'error-input' : '' %>"
+                <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+            <span>
+                <% if (validationErrors.find(e => e.path.includes('spendDays'))) { %>
+                    <%= validationErrors.find(e => e.path.includes('spendDays')).message %>
+                <% } %>
+            </span>
+            <% } %>
+            
+            <label for="numberRoom">Numer pokoju:<abbr title="required" aria-label="required">*</abbr></label>
+            <select id="numberRoom" name="numberRoom" required
+                class="<%= validationErrors.find(e => e.path.includes('numberRoom')) ? 'error-input' : '' %>">
+                <option value="" selected>--- Wybierz pokój ---</option>
+                <% for (let i=0; i<allRooms.length; i++) { let room = allRooms[i]; %>
+                    <option value="<%= room._id %>" label="<%= room.numberRoom + ' Liczba miejsc ' + room.numberOfSpace %>"
+                        <%= (reservation._id && room._id.toString() == reservation.room._id.toString()) ? 'selected' : ''%>></option>
+                <% } %>
+            </select>
+            <span id="errorNumberRoom" class="errors-text">
+                <% if (validationErrors.find(e => e.path.includes('numberRoom'))) { %>
+                    <%= validationErrors.find(e => e.path.includes('numberRoom')).message %>
+                <% } %>
+            </span>
+
+
+            <label for="visitor">Klient:<abbr title="required" aria-label="required">*</abbr></label>
+            <select id="visitor" name="visitor" required
+                class="<%= validationErrors.find(e => e.path.includes('client')) ? 'error-input' : '' %>">
+                <option value="" selected>--- Wybierz klienta ---</option>
+                <% for (let i=0; i<allClients.length; i++) { let visitor = allClients[i]; %>
+                    <option value="<%= visitor._id %>" label="<%= visitor.firstName + ' ' + visitor.lastName %>"
+                        <%= (reservation._id && visitor._id.toString() == reservation.client._id.toString()) ? 'selected' : ''%>></option>
+                <% } %>
+            </select>
+            <span id="errorVisitor" class="errors-text">
+                <% if (validationErrors.find(e => e.path.includes('client'))) { %>
+                    <%= validationErrors.find(e => e.path.includes('client')).message %>
+                <% } %>
+            </span>
+
+
+            <div class="form-buttons">
+                <p id="errorsSummary" class="errors-text"></p>
+                <% if (formMode == 'showDetails') { %>
+                    <a href="/reservation/edit/<%= reservation._id %>" class="form-button-edit">Edytuj</a>
+                <% } else { %>
+                    <input class="form-button-submit" type="submit" value="<%=btnLabel%>" />
+                    <a href="/reservation" class="form-button-cancel">Anuluj</a>
+                <% } %>
+            </div>
+
+            <input type="hidden" name="clientId" value="<%= reservation.client._id %>">
+            <input type="hidden" name="roomId" value="<%= reservation.room._id %>">
+        </form>
+    </main>
+<%- include('../../fragments/footer.ejs') %>
